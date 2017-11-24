@@ -1,0 +1,24 @@
+{
+  "installedLibraries": {
+    "react": {
+      "latest": {
+        "main": "umd/react.development.js",
+        "minified": "umd/react.production.min.js"
+      }
+    },
+    "jquery": {
+      "latest": {
+        "main": "dist/jquery.js",
+        "minified": "dist/jquery.min.js"
+      },
+      "2": {
+        "main": "dist/jquery.js",
+        "minified": "dist/jquery.min.js"
+      },
+      "1": {
+        "main": "dist/jquery.js",
+        "minified": "dist/jquery.min.js"
+      }
+    }
+  }
+}
