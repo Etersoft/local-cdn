@@ -9,12 +9,14 @@ add_package () {
     local main="$3"
     local minified="$4"
 
-    if [ -e "packages/$library/$version" ]; then
-        rm -rf "packages/$library/$version"
-        echo "Removed old version (packages/$library/$version)"
+    #if [ -e "packages/$library/$version" ]; then
+    #    rm -rf "packages/$library/$version"
+    #    echo "Removed old version (packages/$library/$version)"
+    #fi
+    if ! [ -e "packages/$library/$version" ]; then
+        create_package_version "$library" "$version"
+        echo "Created packages/$library/$version/package.json"
     fi
-    create_package_version "$library" "$version"
-    echo "Created packages/$library/$version/package.json"
     install_or_update_package "$library" "$version"
     create_dist_link "$library" "$version" "$main" "$minified"
     echo "Installed $library@$version"
@@ -23,8 +25,8 @@ add_package () {
 create_dist_link () {
     local library="$1"
     local version="$2"
-    local main="$3"
-    local minified="$4"
+    local main_file="$3"
+    local main_file_minified="$4"
 
     public_base="public/$library/$version"
     library_base="packages/$library/$version/node_modules/$library"
@@ -33,8 +35,6 @@ create_dist_link () {
     #if [ -z "$3" ]; then
     #    main_file=$(npm view "$1" main)
     #else
-    local main_file="$3"
-    local main_file_minified="$4"
     #fi
     link_and_print "$library_base/$main_file_minified" "$public_base/$library.min.js"
     link_and_print "$public_base/$library.min.js" "$public_base/$library.js"
