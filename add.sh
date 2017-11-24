@@ -21,7 +21,7 @@ fi
 
 epm assure jq || exit
 
-package="$1"
+library="$1"
 version="$2"
 main="$3"
 main_minified="$4"
@@ -33,5 +33,5 @@ if ! npm view "$1" > /dev/null 2>&1; then
 fi
 
 
-add_package "$package" "$version" "$main" "$main_minified"
-registry_add_library_version "$package" "$version" "$main" "$main_minified"
+add_package "$library" "$version" "$main" "$main_minified"
+registry_add_library_version "$library" "$version" "$main" "$main_minified"
