@@ -3,16 +3,22 @@ fatal () {
     exit 1
 }
 
+remove_package() {
+    local library="$1"
+    local version="$2"
+
+    [ -e "packages/$library/$version" ] || return
+
+    rm -rf "packages/$library/$version"
+    echo "Removed old version (packages/$library/$version)"
+}
+
 add_package () {
     local library="$1"
     local version="$2"
     local main="$3"
     local minified="$4"
 
-    #if [ -e "packages/$library/$version" ]; then
-    #    rm -rf "packages/$library/$version"
-    #    echo "Removed old version (packages/$library/$version)"
-    #fi
     if ! [ -e "packages/$library/$version" ]; then
         create_package_version "$library" "$version"
         echo "Created packages/$library/$version/package.json"

@@ -14,6 +14,12 @@ fi
 
 re='^[0-9\.]+$'
 
+force=''
+if [ "$1" = "-f" ] || [ "$1" = "--force" ] ; then
+    force="$1"
+    shift
+fi
+
 library="$1"
 version="$2"
 main="$3"
@@ -34,6 +40,7 @@ if ! npm view "$library" > /dev/null ; then
     exit 1
 fi
 
+[ -n "$force" ] && remove_package "$library" "$version"
 
 add_package "$library" "$version" "$main" "$main_minified"
 
