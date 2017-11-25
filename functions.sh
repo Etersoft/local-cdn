@@ -111,25 +111,3 @@ registry_package_exists () {
     [ "$result" != "null" ]
 }
 
-update_all_packages () {
-    local libraries=$(registry_get_libraries)
-
-    echo "----------"
-    for library in $libraries; do
-        local versions="$(registry_get_library_versions "$library")"
-        for version in $versions; do
-            echo "Updating $library@$version:"
-            update_package "$library" "$version"
-            echo "----------"
-        done
-    done
-}
-
-update_package () {
-    local library="$1"
-    local version="$2"
-    local main=$(registry_get_package_main "$library" "$version")
-    local main_minified=$(registry_get_package_main_minified "$library" "$version")
-
-    add_package "$library" "$version" "$main" "$main_minified"
-}
