@@ -42,6 +42,6 @@ fi
 
 [ -n "$force" ] && remove_package "$library" "$version"
 
-add_package "$library" "$version" "$main" "$main_minified"
+add_package "$library" "$version" "$main" "$main_minified" || fatal
 
 registry_add_library_version "$library" "$version" "$main" "$main_minified"

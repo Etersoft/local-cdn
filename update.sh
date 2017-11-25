@@ -21,6 +21,6 @@ if [ -z "$library" ] || [ -z "$version" ]; then
     exit
 fi
 
-registry_package_exists "$library" "$version" || fatal "Package not installed: $library@$version"
+registry_package_exists "$library" "$version" || fatal "Package is not installed: $library@$version"
 
 update_package "$library" "$version"

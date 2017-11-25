@@ -8,6 +8,10 @@ epm assure shellcheck || exit
 
 EXCL=-eSC2086,SC2039,SC2034,SC2068,SC2155
 
+# taste case
+# SC2002: Useless cat.
+EXCL="$EXCL,SC2002"
+
 if [ -n "$1" ] ; then
     shellcheck $EXCL "$1"
     #checkbashisms -f "$1"
@@ -17,4 +21,4 @@ fi
 #checkbashisms -f *.sh
 #checkbashisms -f Makefile
 
-shellcheck $EXCL *.sh
+shellcheck $EXCL ./*.sh

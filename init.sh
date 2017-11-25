@@ -12,4 +12,4 @@ cat >> registry.json << EOL
 EOL
 
 echo "Created new registry.json (list of installed libraries)."
-echo "Now use add.sh to add some libraries."
+echo "Now use './add.sh library version main main-minified' to add some libraries."

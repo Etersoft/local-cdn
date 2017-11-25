@@ -1,3 +1,5 @@
+#!/bin/bash
+
 fatal () {
     echo "Error: $*" >&2
     exit 1
@@ -37,7 +39,7 @@ create_dist_link () {
     public_base="public/$library/$version"
     library_base="packages/$library/$version/node_modules/$library"
 
-    mkdir -p "$public_base"
+    mkdir -p "$public_base" || fatal
     #if [ -z "$3" ]; then
     #    main_file=$(npm view "$1" main)
     #else
@@ -62,32 +64,29 @@ create_package_version () {
   "description": "",
   "version": "0.1.0",
   "dependencies": {
-EOL
-    echo "    \"$1\": \"$semver_version\"" >> "packages/$1/$2/package.json"
-    cat >> "packages/$1/$2/package.json" << EOL
+      "$1": "$semver_version"
   }
 }
 EOL
 }
 
 install_or_update_package () {
-    cd "packages/$1/$2/"
-    if ! npm i > /dev/null 2>&1; then
-        fatal "Failed to install $1@$2"
-    fi
-    cd ../../../
+    cd "packages/$1/$2/" || fatal
+
+    npm i > /dev/null || fatal "Failed to install $1@$2"
+
+    cd ../../../ || fatal
 }
 
 link_and_print () {
-    if ! [ -e "$1" ]; then
-        fatal "File not found: $1"
-    fi
+    [ -e "$1" ] || fatal "File not found: $1"
+
     ln -f "$1" "$2"
     echo "Created hardlink: $2 -> $1"
 }
 
 registry_add_library_version () {
-    new_registry=$(cat registry.json | jq --arg lib "$1" --arg version "$2" --arg main "$3" --arg minified "$4" ".installedLibraries[\"$1\"][\"$2\"] = {"main": \$main, "minified": \$minified}") || fatal "jq error"
+    new_registry=$(cat registry.json | jq --arg lib "$1" --arg version "$2" --arg main "$3" --arg minified "$4" ".installedLibraries[\"$1\"][\"$2\"] = {\"main\": \$main, \"minified\": \$minified}") || fatal "jq error"
     echo "$new_registry" > registry.json
 }
 
