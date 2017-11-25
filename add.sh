@@ -14,19 +14,21 @@ fi
 
 re='^[0-9\.]+$'
 
-if ! [[ $2 =~ $re ]] && [ "$2" != "latest" ]; then
-    echo "Bad version: $2"
-    exit 1
-fi
-
-epm assure jq || exit
-
 library="$1"
 version="$2"
 main="$3"
 main_minified="$4"
 
-if ! npm view "$1" > /dev/null 2>&1; then
+# note: do not quote regexp here (SC2076)
+if ! [[ "$version" =~ $re ]] && [ "$version" != "latest" ]; then
+    fatal "Bad version: $version"
+fi
+
+epm assure jq || exit
+epm assure npm || exit
+
+
+if ! npm view "$library" > /dev/null ; then
     echo 'Failed to get package info. Are you sure it exists?'
     echo 'If not sure, check npm-debug.log for details.'
     exit 1
@@ -34,4 +36,5 @@ fi
 
 
 add_package "$library" "$version" "$main" "$main_minified"
+
 registry_add_library_version "$library" "$version" "$main" "$main_minified"

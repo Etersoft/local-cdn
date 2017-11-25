@@ -86,19 +86,19 @@ registry_add_library_version () {
 }
 
 registry_get_libraries () {
-    echo $(cat registry.json | jq -r ".installedLibraries | keys[]")
+    cat registry.json | jq -r ".installedLibraries | keys[]"
 }
 
 registry_get_library_versions () {
-    echo $(cat registry.json | jq -r ".installedLibraries[\"$1\"] | keys[]")
+    cat registry.json | jq -r ".installedLibraries[\"$1\"] | keys[]"
 }
 
 registry_get_package_main () {
-    echo $(cat registry.json | jq -r ".installedLibraries[\"$1\"][\"$2\"].main")
+    cat registry.json | jq -r ".installedLibraries[\"$1\"][\"$2\"].main"
 }
 
 registry_get_package_main_minified () {
-    echo $(cat registry.json | jq -r ".installedLibraries[\"$1\"][\"$2\"].minified")
+    cat registry.json | jq -r ".installedLibraries[\"$1\"][\"$2\"].minified"
 }
 
 registry_package_exists () {
@@ -111,7 +111,7 @@ update_all_packages () {
 
     echo "----------"
     for library in $libraries; do
-        local versions=$(registry_get_library_versions "$library")
+        local versions="$(registry_get_library_versions "$library")"
         for version in $versions; do
             echo "Updating $library@$version:"
             update_package "$library" "$version"

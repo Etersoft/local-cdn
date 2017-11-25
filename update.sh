@@ -9,19 +9,18 @@ if [ "$1" == '-h' ] || [ "$1" == '--help' ] || [ $# -eq 1 ] ; then
 fi
 
 epm assure jq || exit
+epm assure npm || exit
 
 library="$1"
 version="$2"
 
-
+# TODO: allow update all versions of a library
 if [ -z "$library" ] || [ -z "$version" ]; then
     echo 'Updating all packages from registry.json...'
     update_all_packages
-else
-    if registry_package_exists "$library" "$version"; then
-        update_package "$library" "$version"
-    else
-        echo "Package not installed: $library@$version"
-        exit 1
-    fi
+    exit
 fi
+
+registry_package_exists "$library" "$version" || fatal "Package not installed: $library@$version"
+
+update_package "$library" "$version"
