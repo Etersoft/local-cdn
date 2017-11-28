@@ -86,9 +86,14 @@ create_dist_link () {
     #    main_file=$(yarn info "$1" main)
     #else
     #fi
-    link_and_print "$library_base/$main_file_minified" "$public_base/$library.min.js"
-    link_and_print "$public_base/$library.min.js" "$public_base/$library.js"
-    link_and_print "$library_base/$main_file" "$public_base/$library.development.js"
+    if [ "$main_file_minified" != "-" ]; then
+        link_and_print "$library_base/$main_file_minified" "$public_base/$library.min.js"
+        link_and_print "$public_base/$library.min.js" "$public_base/$library.js"
+    fi;
+
+    if [ "$main_file" != "-" ]; then
+        link_and_print "$library_base/$main_file" "$public_base/$library.development.js"
+    fi
     add_custom_links "$library" "$version"
 }
 
