@@ -32,6 +32,31 @@ remove_package() {
     echo "Removed old version (packages/$library/$version)"
 }
 
+add_custom_link () {
+    local library="$1"
+    local version="$2"
+    local local_name="$3"
+
+    local public_name="$(cat registry.json | jq -r ".installedLibraries[\"$library\"][\"$version\"].customLinks[\"$local_name\"]")"
+
+    local public_base="public/$library/$version"
+    local library_base="packages/$library/$version/node_modules/$library"
+
+    link_and_print "$library_base/$local_name" "$public_base/$public_name"
+}
+
+add_custom_links () {
+    local library="$1"
+    local version="$2"
+
+    if [ "$(cat registry.json | jq -r ".installedLibraries[\"$library\"][\"$version\"].customLinks")" != "null" ]; then
+        local links="$(cat registry.json | jq -r ".installedLibraries[\"$library\"][\"$version\"].customLinks | keys[]")"
+        for link in $links; do
+            add_custom_link "$library" "$version" "$link"
+        done
+    fi
+}
+
 add_package () {
     local library="$1"
     local version="$2"
@@ -64,6 +89,7 @@ create_dist_link () {
     link_and_print "$library_base/$main_file_minified" "$public_base/$library.min.js"
     link_and_print "$public_base/$library.min.js" "$public_base/$library.js"
     link_and_print "$library_base/$main_file" "$public_base/$library.development.js"
+    add_custom_links "$library" "$version"
 }
 
 create_package_version () {
@@ -104,7 +130,12 @@ install_or_update_package () {
 link_and_print () {
     [ -e "$1" ] || fatal "File not found: $1"
 
-    ln -f "$1" "$2"
+    local target_dirname="$(dirname "$2")"
+    if [ "$target_dirname" != "." ]; then
+        mkdir -p "$target_dirname" || fatal
+    fi
+
+    ln -f "$1" "$2" || fatal
     echo "Created hardlink: $2 -> $1"
 }
 

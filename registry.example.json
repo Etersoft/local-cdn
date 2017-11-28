@@ -6,6 +6,15 @@
         "minified": "umd/react.production.min.js"
       }
     },
+    "moment": {
+      "2": {
+        "main": "moment.js",
+        "minified": "min/moment.min.js",
+        "customLinks": {
+          "locale": "locale"
+        }
+      }
+    },
     "jquery": {
       "latest": {
         "main": "dist/jquery.js",
