@@ -58,7 +58,7 @@ create_dist_link () {
 
     mkdir -p "$public_base" || fatal
     #if [ -z "$3" ]; then
-    #    main_file=$(npm view "$1" main)
+    #    main_file=$(yarn info "$1" main)
     #else
     #fi
     link_and_print "$library_base/$main_file_minified" "$public_base/$library.min.js"
@@ -75,6 +75,7 @@ create_package_version () {
 
     mkdir -p "packages/$1/$2"
     rm -f "packages/$1/$2/package.json"
+    # private: true is to avoid yarn warnings
     cat >> "packages/$1/$2/package.json" << EOL
 {
   "name": "",
@@ -82,7 +83,8 @@ create_package_version () {
   "version": "0.1.0",
   "dependencies": {
       "$1": "$semver_version"
-  }
+  },
+  "private": true
 }
 EOL
 }
@@ -90,7 +92,11 @@ EOL
 install_or_update_package () {
     cd "packages/$1/$2/" || fatal
 
-    npm i > /dev/null || fatal "Failed to install $1@$2"
+    if [ -e yarn.lock ]; then
+        yarn upgrade > /dev/null || fatal "Failed to update $1@$2"
+    else
+        yarn install > /dev/null || fatal "Failed to install $1@$2"
+    fi
 
     cd ../../../ || fatal
 }

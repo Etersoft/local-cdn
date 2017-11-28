@@ -48,10 +48,10 @@ if ! [[ "$version" =~ $re ]] && [ "$version" != "latest" ]; then
 fi
 
 epm assure jq || exit
-epm assure npm || exit
+epm assure yarn || exit
 
 
-if ! npm view "$library" > /dev/null ; then
+if ! yarn info "$library" > /dev/null ; then
     echo 'Failed to get package info. Are you sure it exists?'
     echo 'If not sure, check npm-debug.log for details.'
     exit 1

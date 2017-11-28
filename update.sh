@@ -26,7 +26,7 @@ if [ "$1" == '-h' ] || [ "$1" == '--help' ] || [ $# -eq 1 ] ; then
 fi
 
 epm assure jq || exit
-epm assure npm || exit
+epm assure yarn || exit
 
 library="$1"
 version="$2"
