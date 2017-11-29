@@ -42,7 +42,7 @@ add_custom_link () {
     local public_base="public/$library/$version"
     local library_base="packages/$library/$version/node_modules/$library"
 
-    link_and_print "$library_base/$local_name" "$public_base/$public_name"
+    copy_and_print "$library_base/$local_name" "$public_base/$public_name"
 }
 
 add_custom_links () {
@@ -87,12 +87,12 @@ create_dist_link () {
     #else
     #fi
     if [ "$main_file_minified" != "-" ]; then
-        link_and_print "$library_base/$main_file_minified" "$public_base/$library.min.js"
-        link_and_print "$public_base/$library.min.js" "$public_base/$library.js"
+        copy_and_print "$library_base/$main_file_minified" "$public_base/$library.min.js"
+        copy_and_print "$public_base/$library.min.js" "$public_base/$library.js"
     fi;
 
     if [ "$main_file" != "-" ]; then
-        link_and_print "$library_base/$main_file" "$public_base/$library.development.js"
+        copy_and_print "$library_base/$main_file" "$public_base/$library.development.js"
     fi
     add_custom_links "$library" "$version"
 }
@@ -126,7 +126,7 @@ install_or_update_package () {
     cd ../../../ || fatal
 }
 
-link_and_print () {
+copy_and_print () {
     [ -e "$1" ] || fatal "File not found: $1"
 
     local target_dirname="$(dirname "$2")"
@@ -134,8 +134,8 @@ link_and_print () {
         mkdir -p "$target_dirname" || fatal
     fi
 
-    ln -f "$1" "$2" || fatal
-    echo "Created hardlink: $2 -> $1"
+    cp -alf "$1" "$2" || fatal
+    echo "Created in public: $2 (same as $1)"
 }
 
 registry_add_library_version () {
