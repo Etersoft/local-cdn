@@ -28,6 +28,15 @@
         "main": "dist/jquery.js",
         "minified": "dist/jquery.min.js"
       }
+    },
+    "alertifyjs": {
+      "latest": {
+        "main": "build/alertify.js",
+        "minified": "build/alertify.min.js",
+        "customLinks": {
+          "build/css": "css"
+        }
+      }
     }
   }
 }
