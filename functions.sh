@@ -112,7 +112,8 @@ create_package_version () {
   "version": "0.1.0",
   "dependencies": {
       "$1": "$semver_version"
-  }
+  },
+  "private": true
 }
 EOL
 }
