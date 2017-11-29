@@ -88,11 +88,10 @@ create_dist_link () {
     #fi
     if [ "$main_file_minified" != "-" ]; then
         copy_and_print "$library_base/$main_file_minified" "$public_base/$library.min.js"
-        copy_and_print "$public_base/$library.min.js" "$public_base/$library.js"
     fi;
 
     if [ "$main_file" != "-" ]; then
-        copy_and_print "$library_base/$main_file" "$public_base/$library.development.js"
+        copy_and_print "$library_base/$main_file" "$public_base/$library.js"
     fi
     add_custom_links "$library" "$version"
 }
